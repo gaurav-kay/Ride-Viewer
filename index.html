@@ -7,8 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
     <script src="./GpxParser.js"></script>
+    <script src="./key.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
     <style>
+        #controlsDiv {
+            display: block;
+            position: relative;
+            margin: 0px auto;
+            width: 50%;
+            height: 40px;
+            padding: 10px;
+            border: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            text-align: center;
+            color: #fff;
+            background: #ee8a65;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -25,7 +41,12 @@
 </head>
 
 <body>
-    <input type="file" id="fileInput">
+    <div id="controlsDiv">        
+        <input type="file" id="fileInput">
+        <input type="range" min="1" max="100" value="50" id="speedRange">
+        <button id="startStop">START</button>
+        <button id="reset">RESET</button>
+    </div>
     <div id="map"></div>
     <script src="./index.js"></script>
 </body>

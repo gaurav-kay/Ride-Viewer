@@ -1,14 +1,22 @@
+let map;
+let isStarted = false;
 
-function loadMap(fileContent) {
-    const div = document.getElementById('map')
-    div.hidden = false
+window.addEventListener("load", (event) => {
+    mapboxgl.accessToken = API_KEY
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid29mYWpvNDU3MyIsImEiOiJjbGxjMmtpbGkwZmtoM2NsMXJkYWxxYnY3In0.fEsqwNcZF10YL-4bhA7hqA'
-
-    const map = new mapboxgl.Map({
+    map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v12',
+        center: {lat: 20.5937, lon: 78.9629},
+        zoom: 3
     })
+})
+
+function loadMap(fileContent) {
+    // map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/streets-v12',
+    // })  // making this map object again may cause problems, ideally we should use same map object throughout i think
 
     var gpx = new gpxParser()
     gpx.parse(fileContent)
@@ -40,30 +48,30 @@ function loadMap(fileContent) {
 
     console.log(bottomLeft, topRight)
 
-    map.on('load', () => {
-        map.fitBounds([bottomLeft, topRight])
+    if (!map) {
+        console.log("Map not initialised yet")
+    }
 
-        map.addSource('route', {
-            'type': 'geojson',
-            'data': geoJSON
-        })
+    map.fitBounds([bottomLeft, topRight])
 
-        map.addLayer({
-            'id': 'route',
-            'type': 'line',
-            'source': 'route',
-            'layout': {
-                'line-join': 'round',
-                'line-cap': 'round'
-            },
-            'paint': {
-                'line-color': '#F00',
-                'line-width': 8
-            }
-        })
+    map.addSource('route', {
+        'type': 'geojson',
+        'data': geoJSON
     })
 
-
+    map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+        },
+        'paint': {
+            'line-color': '#F00',
+            'line-width': 8
+        }
+    })
 }
 
 async function readFileAsText(file) {
@@ -96,4 +104,15 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             console.error('Error reading the file:', error);
         }
     }
-});
+})
+
+document.getElementById('startStop').addEventListener('click', (event) => {
+    if (!isStarted) {
+        // on change of range listener, update the timeout interval thing and pass it here maybe
+        moveMarker()
+    } else {
+        stopMarker()
+    }
+})
+
+

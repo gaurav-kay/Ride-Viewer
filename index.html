@@ -12,8 +12,62 @@
     <style>
         #controlsDiv {
             display: block;
-            position: relative;
+            position: absolute;
+            top: 2%;
             margin: 0px auto;
+            left: 50%;
+            transform: translateX(-50%);
+
+            width: 50%;
+            height: fit-content;
+            padding: 10px;
+            border: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            text-align: center;
+            color: #fff;
+            background: #ee8a65;
+        }
+
+        #fileInput {
+            display: none;
+            /* Hide the default file input */
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #3498db;
+            /* Use a nice blue color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-family: "Arial", sans-serif;
+            /* Use a better-suited font */
+            font-size: 14px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .custom-file-upload:hover {
+            background: #2980b9;
+            /* Darker shade on hover */
+        }
+
+        #speedRange {
+            width: 100%;
+        }
+
+        #bottomControlsDiv {
+            display: none;
+            position: absolute;
+            /* Change to "absolute" positioning */
+            bottom: 2%;
+            /* Position at the bottom of the page */
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
+            /* Center horizontally */
             width: 50%;
             height: 40px;
             padding: 10px;
@@ -23,6 +77,7 @@
             text-align: center;
             color: #fff;
             background: #ee8a65;
+            /* Add any additional styles specific to the new section */
         }
 
         body {
@@ -37,17 +92,41 @@
             width: 100%;
             z-index: -1;
         }
+
+        #fileSelectedName {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            /* Dark text color */
+        }
+
+        #marker {
+            display: block;
+            size: 400px;
+            fill: black;
+            top: 10px;
+            left: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <div id="controlsDiv">        
+    <div id="controlsDiv">
+        <label for="fileInput" class="custom-file-upload">Upload File</label>
         <input type="file" id="fileInput">
-        <input type="range" min="1" max="100" value="50" id="speedRange">
-        <button id="startStop">START</button>
-        <button id="reset">RESET</button>
+        <div id="fileSelectedName"></div>
+        <!-- <input type="range" value="0" id="speedRange"><div id="timeOfRangeText"></div> -->
+        <!-- <button id="startStop">START</button>
+            <button id="reset">RESET</button> -->
     </div>
     <div id="map"></div>
+
+    <div id="bottomControlsDiv" hidden>
+        <input type="range" value="0" id="speedRange">
+        <div id="timeOfRangeText"></div>
+    </div>
+
     <script src="./index.js"></script>
 </body>
 

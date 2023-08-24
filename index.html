@@ -54,7 +54,7 @@
             /* Darker shade on hover */
         }
 
-        #speedRange {
+        #timeRange {
             width: 100%;
         }
 
@@ -116,15 +116,15 @@
         <label for="fileInput" class="custom-file-upload">Upload File</label>
         <input type="file" id="fileInput">
         <div id="fileSelectedName"></div>
-        <!-- <input type="range" value="0" id="speedRange"><div id="timeOfRangeText"></div> -->
-        <!-- <button id="startStop">START</button>
-            <button id="reset">RESET</button> -->
     </div>
     <div id="map"></div>
 
     <div id="bottomControlsDiv" hidden>
+        <input type="range" value="0" id="timeRange">
+        <div id="timeRangeText"></div>
+        <button id="startStop">START</button>
+        <button id="reset">RESET</button>
         <input type="range" value="0" id="speedRange">
-        <div id="timeOfRangeText"></div>
     </div>
 
     <script src="./index.js"></script>

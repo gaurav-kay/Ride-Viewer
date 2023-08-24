@@ -7,6 +7,7 @@ let lons
 let eles
 let times
 let timestamps
+let updateDelay = 1000
 
 window.addEventListener("load", (event) => {
     mapboxgl.accessToken = API_KEY
@@ -83,16 +84,16 @@ function loadMap(fileContent) {
         }
     })
 
-    document.getElementById("bottomControlsDiv").style.display = "block"; // or "flex" or whatever display value you want
-
     setupRide()
 }
 
 function setupRide() {
-    let range = document.getElementById("speedRange")
+    document.getElementById("bottomControlsDiv").style.display = "block"; // or "flex" or whatever display value you want
+    let range = document.getElementById("timeRange")
 
-    range.min = Math.min(...timestamps)
-    range.max = Math.max(...timestamps)
+    range.quanta = Number(Math.min(...timestamps))
+    range.min = 0
+    range.max = Number(Math.max(...timestamps)) - range.quanta
     range.value = range.min
 
     rider = document.createElement('img')
@@ -154,6 +155,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             let fileContent = await readFileAsText(selectedFile);
             // const fileContent = await fetch('C:\\Projects\\RideViewer\\2023-08-14_14_Aug_2023_4_03_33_pm.gpx')
             // fileContent = fileContent.text()
+
             loadMap(fileContent)
         } catch (error) {
             console.error('Error reading the file:', error);
@@ -170,9 +172,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
 //     }
 // })
 
-document.getElementById('speedRange').addEventListener('input', (event) => {
-    let timestamp = event.target.value
-
+function updateMarker(timestamp) {
     let closestTimestampIdx = 0
     while (timestamps[closestTimestampIdx] < timestamp) {
         closestTimestampIdx += 1
@@ -180,6 +180,27 @@ document.getElementById('speedRange').addEventListener('input', (event) => {
 
     marker.setLngLat({ lat: lats[closestTimestampIdx], lon: lons[closestTimestampIdx] })
         .addTo(map);
+}
+
+document.getElementById('timeRange').addEventListener('input', (event) => {
+    let timestamp = Number(event.target.value) + Number(event.target.quanta)
+
+    updateMarker(timestamp)
 })
 
+document.getElementById('startStop').addEventListener('click', (event) => {
+    if (!isStarted) {
+        let x = setInterval(() => {
+            let range = document.getElementById('timeRange')
+            range.value = Number(range.value) + updateDelay
 
+            let timestamp = Number(range.value) + Number(range.quanta)
+            console.log(timestamp, "from auto");
+            updateMarker(timestamp)
+
+        }, 20)
+        console.log(x);
+    } else {
+
+    }
+})

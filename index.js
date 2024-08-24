@@ -7,7 +7,9 @@ let lons
 let eles
 let times
 let timestamps
-let updateDelay = 1000
+let stepValue = 1000  // 1 second
+let updateDelay = 20 // 20 ms
+let interval
 
 window.addEventListener("load", (event) => {
     mapboxgl.accessToken = API_KEY
@@ -108,7 +110,7 @@ function setupRide() {
     //     </svg>
     // </div>
     //    `
-    rider.style.backgroundImage = `url(https://placekitten.com/g/50/50/)`;
+    rider.style.backgroundImage = `url(https://placecats.com/50/50)`;
     rider.style.width = `50px`;
     rider.style.height = `50px`;
     rider.style.backgroundSize = '100%';
@@ -153,8 +155,6 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             document.getElementById("fileSelectedName").innerText = selectedFile.name
 
             let fileContent = await readFileAsText(selectedFile);
-            // const fileContent = await fetch('C:\\Projects\\RideViewer\\2023-08-14_14_Aug_2023_4_03_33_pm.gpx')
-            // fileContent = fileContent.text()
 
             loadMap(fileContent)
         } catch (error) {
@@ -190,17 +190,21 @@ document.getElementById('timeRange').addEventListener('input', (event) => {
 
 document.getElementById('startStop').addEventListener('click', (event) => {
     if (!isStarted) {
-        let x = setInterval(() => {
+        interval = setInterval(() => {
             let range = document.getElementById('timeRange')
-            range.value = Number(range.value) + updateDelay
+            range.value = Number(range.value) + stepValue
 
             let timestamp = Number(range.value) + Number(range.quanta)
-            console.log(timestamp, "from auto");
             updateMarker(timestamp)
 
-        }, 20)
-        console.log(x);
+        }, updateDelay)
+        
+        event.target.innerHTML = "STOP"
+        isStarted = true;
     } else {
+        clearInterval(interval)
 
+        event.target.innerHTML = "START"
+        isStarted = false;
     }
 })
